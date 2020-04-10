@@ -3,7 +3,7 @@ import xlwt
 import xlrd
 import json
 
-filePath = 'D:\新冠病毒2.xlsx'
+filePath = 'D:\新冠病毒.xlsx'
 
 class weiboData(object):
 
@@ -49,39 +49,39 @@ class weiboData(object):
 
            m = 0
            response = requests.get(url, headers = headers, proxies = proxies)
-           if response.content:
-               all = json.loads(response.text)
-               cards = all['data']['cards']
-               for card in cards:
-                   data = []
-                   if card.get('mblog', None):
-                       mblog = card['mblog']
-                       time = mblog['created_at']
-                       author = mblog['user']['screen_name']
-                       isVerified = mblog['user']['verified']
-                       if mblog['isLongText'] == True:
-                           isLongText = True
-                           text = mblog['longText']['longTextContent']
-                       if mblog['isLongText'] == False:
-                           isLongText = False
-                           text = mblog['text']
+           # if response.content:
+           all = json.loads(response.text, strict = False)
+           cards = all['data']['cards']
+           for card in cards:
+               data = []
+               if card.get('mblog', None):
+                   mblog = card['mblog']
+                   time = mblog['created_at']
+                   author = mblog['user']['screen_name']
+                   isVerified = mblog['user']['verified']
+                   if mblog['isLongText'] == True:
+                       isLongText = True
+                       text = mblog['longText']['longTextContent']
+                   if mblog['isLongText'] == False:
+                       isLongText = False
+                       text = mblog['text']
 
-                   #拼装成一个列表
-                   data.append(rowCount + m)  # 为每条微博加序号
-                   data.append(time)
-                   data.append(author)
-                   data.append(isVerified)
-                   data.append(isLongText)
-                   data.append(text)
+               #拼装成一个列表
+               data.append(rowCount + m)  # 为每条微博加序号
+               data.append(time)
+               data.append(author)
+               data.append(isVerified)
+               data.append(isLongText)
+               data.append(text)
 
-                   for i in range(len(data)):
-                       self.sheet1.write(rowCount+m,i,data[i]) #写入数据到execl中
+               for i in range(len(data)):
+                   self.sheet1.write(rowCount+m,i,data[i]) #写入数据到execl中
 
-                   m += 1   #记录行数增量
-                   print(m)
+               m += 1   #记录行数增量
+               print(m)
 
-           else:
-               print("失败")
+           # else:
+           #     print("失败")
 
         except Exception as e:
                print ('出错',type(e),e)
