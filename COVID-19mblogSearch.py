@@ -3,6 +3,8 @@ import xlwt
 import xlrd
 import json
 
+filePath = 'D:\新冠病毒.xlsx'
+
 class weiboData(object):
 
     def __init__(self):
@@ -13,7 +15,7 @@ class weiboData(object):
             #最后一个参数设置样式
             self.sheet1.write(0, i, self.rowsTitle[i], self.set_style('Times new Roman', 220, True))
         #Excel保存位置
-        self.f.save('D:\新冠病毒.xlsx')
+        self.f.save(filePath)
     #该函数设置字体样式
     def set_style(self,name, height, bold=False):
         style = xlwt.XFStyle()  # 初始化样式
@@ -35,7 +37,7 @@ class weiboData(object):
            return None
 
         try:
-           data = xlrd.open_workbook('D:\新冠病毒.xlsx')#打开Excel文件
+           data = xlrd.open_workbook(filePath)#打开Excel文件
            table = data.sheets()[0] #通过索引顺序获取table，因为初始化时只创建了一个table，因此索引值为0
            rowCount = table.nrows  #获取行数，下次从这一行开始
            proxies = {#使用代理IP，获取IP的方式在上一篇文章爬虫打卡4中有叙述
@@ -81,7 +83,7 @@ class weiboData(object):
                print ('出错',type(e),e)
 
         finally:
-           self.f.save('D:\新冠病毒.xlsx')
+           self.f.save(filePath)
 
 
 if '_main_':
